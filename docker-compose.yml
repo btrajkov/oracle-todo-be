@@ -1,0 +1,36 @@
+services:
+  mysql-db:
+    image: mysql
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - todo-network
+
+  quarkus-app:
+    image: localhost/quarkus/todo-jvm  # Replace with your Quarkus app image
+    container_name: todo-app
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql-db:3306/todo
+      QUARKUS_DATASOURCE_USERNAME: root
+      QUARKUS_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+    networks:
+      - todo-network
+    restart: always
+
+volumes:
+  mysql_data:
+
+networks:
+  todo-network:
+    driver: bridge
