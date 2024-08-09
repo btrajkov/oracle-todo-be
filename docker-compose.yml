@@ -14,7 +14,7 @@ services:
       - todo-network
 
   quarkus-app:
-    image: localhost/quarkus/todo-jvm  # Replace with your Quarkus app image
+    image: quay.io/branislav_trajkov00/todo
     container_name: todo-app
     environment:
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql-db:3306/todo
