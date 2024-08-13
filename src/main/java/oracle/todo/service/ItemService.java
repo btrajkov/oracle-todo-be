@@ -1,5 +1,6 @@
 package oracle.todo.service;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import oracle.todo.model.Category;
@@ -48,6 +49,25 @@ public class ItemService {
         result.setStatus(item.getStatus());
 
         return result;
+    }
+
+    public List<ItemJSON> getItemsByCustomerId(Long id) {
+        List<ItemJSON> itemJSONS = new ArrayList<>();
+        PanacheQuery<Item> pqi = Item.find("customer.id", id);
+        List<Item> li = pqi.list();
+
+        for (Item i : li) {
+            ItemJSON itemJSON = new ItemJSON();
+            itemJSON.setId(i.id);
+            itemJSON.setName(i.getName());
+            itemJSON.setCustomerId(i.getCustomer().id);
+            itemJSON.setCategoryId(i.getCategory().id);
+            itemJSON.setDate(i.getDate().toString());
+            itemJSON.setStatus(i.getStatus());
+            itemJSONS.add(itemJSON);
+        }
+
+        return itemJSONS;
     }
 
     @Transactional
@@ -102,6 +122,15 @@ public class ItemService {
         Optional<Customer> optionalCustomer = Customer.findByIdOptional(itemJSON.getCustomerId());
         if (optionalCustomer.isEmpty()) throw new Exception("Customer does not exist.");
         item.setCustomer(optionalCustomer.get());
+
+        item.persist();
+    }
+
+    @Transactional
+    public void updateItemStatus(ItemJSON itemJSON) throws Exception {
+        Optional<Item> optionalItem = Item.findByIdOptional(itemJSON.getId());
+        if (optionalItem.isEmpty()) throw new Exception("Item does not exist.");
+        Item item = optionalItem.get();
 
         if (item.getStatus().equals("new")) item.setStatus("in progress");
         else if (item.getStatus().equals("in progress")) item.setStatus("done");

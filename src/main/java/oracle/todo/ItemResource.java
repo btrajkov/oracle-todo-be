@@ -22,6 +22,14 @@ public class ItemResource {
     }
 
     @GET
+    @Path("/user/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({ TokenUtils.ROLE_USER })
+    public Response getItemsByCustomerId(@PathParam("id") Long id) {
+        return Response.status(Response.Status.OK).entity(itemService.getItemsByCustomerId(id)).build();
+    }
+
+    @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ TokenUtils.ROLE_USER })
@@ -57,6 +65,19 @@ public class ItemResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).entity("Item successfully updated.").build();
+    }
+
+    @PUT
+    @Path("/status")
+    @Produces(MediaType.TEXT_PLAIN)
+    @RolesAllowed({ TokenUtils.ROLE_USER })
+    public Response updateItemStatus(ItemJSON itemJSON) {
+        try {
+            itemService.updateItemStatus(itemJSON);
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).entity("Item status successfully updated.").build();
     }
 
     @DELETE
