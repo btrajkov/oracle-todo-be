@@ -22,7 +22,7 @@ public class ItemService {
             ItemJSON itemJSON = new ItemJSON();
             itemJSON.setId(i.id);
             itemJSON.setName(i.getName());
-            itemJSON.setDate(i.getDate().toString());
+            itemJSON.setDate(i.getDate_until().toString());
             itemJSON.setCustomerId(i.getCustomer().id);
             itemJSON.setCategoryId(i.getCategory().id);
             itemJSON.setStatus(i.getStatus());
@@ -43,7 +43,7 @@ public class ItemService {
         ItemJSON result = new ItemJSON();
         result.setId(id);
         result.setName(item.getName());
-        result.setDate(item.getDate().toString());
+        result.setDate(item.getDate_until().toString());
         result.setCustomerId(item.getCustomer().id);
         result.setCategoryId(item.getCategory().id);
         result.setStatus(item.getStatus());
@@ -62,7 +62,7 @@ public class ItemService {
             itemJSON.setName(i.getName());
             itemJSON.setCustomerId(i.getCustomer().id);
             itemJSON.setCategoryId(i.getCategory().id);
-            itemJSON.setDate(i.getDate().toString());
+            itemJSON.setDate(i.getDate_until().toString());
             itemJSON.setStatus(i.getStatus());
             itemJSONS.add(itemJSON);
         }
@@ -81,7 +81,7 @@ public class ItemService {
         if (!itemJSON.getDate().matches("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$")) throw new Exception("Date must be in format yyyy-MM-dd");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = formatter.parse(itemJSON.getDate());
-        item.setDate(date);
+        item.setDate_until(date);
 
         if (itemJSON.getCategoryId() == null || itemJSON.getCategoryId() == 0L) throw new Exception("Category is a required field.");
         Optional<Category> optionalCategory = Category.findByIdOptional(itemJSON.getCategoryId());
@@ -111,7 +111,7 @@ public class ItemService {
         if (!itemJSON.getDate().matches("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$")) throw new Exception("Date must be in format yyyy-MM-dd");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = formatter.parse(itemJSON.getDate());
-        item.setDate(date);
+        item.setDate_until(date);
 
         if (itemJSON.getCategoryId() == null || itemJSON.getCategoryId() == 0L) throw new Exception("Category is a required field.");
         Optional<Category> optionalCategory = Category.findByIdOptional(itemJSON.getCategoryId());

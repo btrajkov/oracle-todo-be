@@ -18,7 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Item extends PanacheEntity {
     private String name;
-    private Date date;
+    private Date date_until;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
     @ManyToOne(fetch = FetchType.LAZY)
